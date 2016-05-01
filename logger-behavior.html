@@ -1,0 +1,55 @@
+<script>
+
+    (function() {
+        window.isLog4JavascriptLoaded = function() {
+            return (typeof(log4javascript) !== 'undefined') && (log4javascript !== null);
+        };
+    })();
+
+    var Logger = function (name) {
+        if(isLog4JavascriptLoaded()) {
+            this.logger = log4javascript.getLogger(name);
+            var appender = new log4javascript.BrowserConsoleAppender();
+            appender.setLayout(new log4javascript.PatternLayout("[%c %d{hh:mm:ss} %-5p] - %m%n"));
+            this.logger.addAppender(appender);
+        }
+    };
+
+    Logger.prototype = {
+        debug: function (msg) {
+            if(isLog4JavascriptLoaded() && (window.loglevel == 'DEBUG')) {
+                this.logger.debug(msg);
+            }
+        },
+
+        info: function (msg) {
+            if (isLog4JavascriptLoaded() && (window.loglevel == 'DEBUG')) {
+                this.logger.info(msg);
+            }
+        },
+
+        warn: function (msg) {
+            if (isLog4JavascriptLoaded() && (window.loglevel == 'DEBUG')) {
+                this.logger.warn(msg);
+            }
+        },
+
+        error: function (msg) {
+            if (isLog4JavascriptLoaded() && (window.loglevel == 'DEBUG')) {
+                this.logger.error(msg);
+            }
+        }
+    };
+
+    akreet = window.akreet || {};
+    akreet.LoggerBehavior = {
+        properties: {
+            logger: {
+                type: Object,
+                value: function () {
+                    return new Logger(this.tagName);
+                }
+            }
+        }
+    }
+</script>
